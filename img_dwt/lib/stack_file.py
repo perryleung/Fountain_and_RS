@@ -171,13 +171,13 @@ class Stack_Recv_File():
                     self.img_fd.write(packet_byte[9:])
                     self.recv_packet.append(send_serial)
                     # if self.recv_by_now >= (packet_nums - 7):  # RS编码需要这一行判断
-                    if self.recv_by_now >= packet_nums: # 普通JPG传送需要这一行
-                        time.sleep(30) # 防止中途有丢包收不到
+                    if self.recv_by_now > packet_nums: # 非RS编码传送需要这一行
+                        # time.sleep(30) # 防止中途有丢包收不到
                         self.img_fd.close()
                         if ord(packet_byte[3]) == BMP_TYPE:
                             os.rename(self.img_name, self.img_name + ".bmp")
                             logging.info("recv done , img name: {}".format(self.img_name + ".bmp"))
-                        elif ord(packet_byte[3]) == BMP_TYPE:
+                        elif ord(packet_byte[3]) == JPG_TYPE:
                             os.rename(self.img_name, self.img_name + ".jpg")
                             logging.info("recv done , img name: {}".format(self.img_name + ".jpg"))
                         elif ord(packet_byte[3]) == RS_TYPE:
